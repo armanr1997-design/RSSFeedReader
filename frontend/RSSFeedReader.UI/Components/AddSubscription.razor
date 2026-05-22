@@ -1,0 +1,75 @@
+@using System.Net.Http.Json
+@using RSSFeedReader.UI.Models
+@inject HttpClient Http
+
+<div class="mb-3">
+    <label for="feedUrl" class="form-label">Feed URL</label>
+    <input id="feedUrl" class="form-control" @bind="Url" placeholder="Enter feed URL" />
+</div>
+<button class="btn btn-primary" @onclick="SubmitAsync" disabled="@isSubmitting">Add Subscription</button>
+@if (!string.IsNullOrEmpty(Message))
+{
+    <div class="mt-3 alert @AlertClass" role="alert">@Message</div>
+}
+
+@code {
+    private string Url { get; set; } = string.Empty;
+    private bool isSubmitting;
+    private string? Message;
+    private string AlertClass => Message?.StartsWith("This subscription") == true || Message?.StartsWith("Please") == true ? "alert-danger" : "alert-success";
+
+    [Parameter]
+    public EventCallback<Subscription> OnAdded { get; set; }
+
+    private async Task SubmitAsync()
+    {
+        Message = null;
+
+        var trimmed = Url.Trim();
+        if (string.IsNullOrWhiteSpace(trimmed))
+        {
+            Message = "Please enter a valid URL.";
+            return;
+        }
+
+        if (!Uri.TryCreate(trimmed, UriKind.Absolute, out var uri) || (uri.Scheme != Uri.UriSchemeHttp && uri.Scheme != Uri.UriSchemeHttps))
+        {
+            Message = "Please enter a valid URL that starts with http:// or https://.";
+            return;
+        }
+
+        isSubmitting = true;
+        try
+        {
+            var response = await Http.PostAsJsonAsync("subscriptions", new { url = trimmed });
+            if (response.IsSuccessStatusCode)
+            {
+                var subscription = await response.Content.ReadFromJsonAsync<Subscription>();
+                if (subscription != null)
+                {
+                    await OnAdded.InvokeAsync(subscription);
+                    Message = "Subscription added successfully.";
+                    Url = string.Empty;
+                }
+            }
+            else
+            {
+                var errorResponse = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+                Message = errorResponse?.Error ?? "Failed to add subscription.";
+            }
+        }
+        catch
+        {
+            Message = "Unable to connect to the API. Please ensure the backend is running.";
+        }
+        finally
+        {
+            isSubmitting = false;
+        }
+    }
+
+    private class ErrorResponse
+    {
+        public string? Error { get; set; }
+    }
+}

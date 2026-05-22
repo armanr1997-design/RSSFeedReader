@@ -1,0 +1,56 @@
+@page "/"
+@using System.Net.Http.Json
+@using RSSFeedReader.UI.Models
+@using RSSFeedReader.UI.Components
+@inject HttpClient Http
+
+<PageTitle>Subscriptions</PageTitle>
+
+<h1>Subscriptions</h1>
+
+<AddSubscription OnAdded="HandleAdded" />
+
+@if (subscriptions is null)
+{
+    <p>Loading subscriptions...</p>
+}
+else if (!subscriptions.Any())
+{
+    <p>No subscriptions yet. Add one to get started.</p>
+}
+else
+{
+    <div class="list-group mt-4">
+        @foreach (var item in subscriptions)
+        {
+            <div class="list-group-item">
+                <div><strong>@item.Url</strong></div>
+                <div class="text-muted">Added @item.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm")</div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<Subscription>? subscriptions;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSubscriptionsAsync();
+    }
+
+    private async Task LoadSubscriptionsAsync()
+    {
+        subscriptions = await Http.GetFromJsonAsync<List<Subscription>>("subscriptions") ?? new List<Subscription>();
+    }
+
+    private async Task HandleAdded(Subscription subscription)
+    {
+        if (subscriptions == null)
+        {
+            subscriptions = new List<Subscription>();
+        }
+
+        subscriptions.Add(subscription);
+    }
+}

@@ -1,0 +1,13 @@
+<Solution>
+  <Folder Name="/backend/">
+    <Project Path="backend/RSSFeedReader.Api/RSSFeedReader.Api.csproj" />
+  </Folder>
+  <Folder Name="/frontend/">
+    <Project Path="frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/backend.unit/backend.unit.csproj" />
+    <Project Path="tests/frontend.components/frontend.components.csproj" />
+    <Project Path="tests/integration/integration.csproj" />
+  </Folder>
+</Solution>

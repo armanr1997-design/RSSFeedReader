@@ -1,0 +1,29 @@
+name: .NET
+
+on:
+  push:
+    branches:
+      - master
+      - '001-*'
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - name: Restore
+        run: dotnet restore RSSFeedReader.slnx
+      - name: Build
+        run: dotnet build RSSFeedReader.slnx --configuration Release --no-restore
+      - name: Run backend tests
+        run: dotnet test tests/backend.unit/backend.unit.csproj --no-restore --verbosity minimal
+      - name: Run frontend tests
+        run: dotnet test tests/frontend.components/frontend.components.csproj --no-restore --verbosity minimal

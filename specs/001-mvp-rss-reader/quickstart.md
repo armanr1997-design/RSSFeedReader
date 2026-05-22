@@ -18,6 +18,8 @@ dotnet run --project frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj
 
 4. Open the frontend URL in a browser (default shown in terminal). Add subscriptions via the UI and verify they appear in the list.
 
+5. Verify add-to-list feedback is visible within 1 second after submitting a valid URL.
+
 Notes:
 - Ensure backend and frontend ports are coordinated (see `TechStack.md`).
 - Backend must enable CORS for the frontend origin during local development.
