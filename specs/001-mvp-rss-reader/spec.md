@@ -70,8 +70,8 @@ The application validates user input and prevents invalid URLs or duplicate subs
 
 - **FR-001**: System MUST provide a text input field where users can enter a feed URL.
 - **FR-002**: System MUST provide a button or mechanism to confirm the addition of a subscription.
-- **FR-003**: System MUST validate the input as a syntactically correct URL before adding the subscription.
-- **FR-004**: System MUST add the URL to an in-memory subscription list and display it in the UI if validation succeeds.
+- **FR-003**: System MUST trim leading and trailing whitespace from the input, then validate it as a syntactically correct URL before adding the subscription.
+- **FR-004**: System MUST add the trimmed and validated URL to an in-memory subscription list and display it in the UI if validation succeeds.
 - **FR-005**: System MUST prevent duplicate subscriptions by checking if the URL already exists before adding.
 - **FR-006**: System MUST display a validation message to the user if the URL is invalid or already exists.
 - **FR-007**: System MUST display all current subscriptions in a persistent list visible on the same page.
@@ -93,10 +93,17 @@ The application validates user input and prevents invalid URLs or duplicate subs
 - **SC-005**: The subscription list remains complete and unchanged while the application session is active (no data loss during the session).
 - **SC-006**: The user interface clearly indicates what input is expected (e.g., "Enter feed URL") and provides accessible feedback for all actions.
 
+## Clarifications
+
+### Session 2026-05-22
+
+- **Q: URL Validation Scope** → **A: Validate** (Option A) — Check URL format syntactically before adding; reject malformed input with a message. This aligns with the project constitution's security principle and prevents obvious user errors.
+- **Q: Whitespace Handling** → **A: Auto-Trim** (Option A) — Automatically strip leading and trailing whitespace from input before validation/storage; store only the trimmed URL. This prevents duplicate entries and improves user experience.
+
 ## Assumptions
 
 - The application is single-user and runs locally on the user's machine (Windows, macOS, or Linux).
 - In-memory storage is sufficient for the MVP; persistence to disk or database is explicitly deferred to a future phase.
-- URL format validation uses standard URL parsing logic; deep validation of whether a URL actually hosts an RSS/Atom feed is out of scope for the MVP.
+- URL format validation uses standard URL parsing logic (syntactic check); deep validation of whether a URL actually hosts an RSS/Atom feed is out of scope for the MVP.
 - The MVP does not require integration with any external services or dependencies beyond the chosen tech stack (ASP.NET Core Web API + Blazor WebAssembly).
 - Feed fetching, parsing, item display, and all other feed reader functionality are explicitly out of scope for this MVP.
