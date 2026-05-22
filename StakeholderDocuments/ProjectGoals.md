@@ -27,7 +27,7 @@ The focus is on rapid development of the MVP feature. Build the minimal function
 To keep development fast:
 
 - No feed fetching or parsing needed for MVP
-- No validation of feed URLs (assume user provides valid URLs)
+- Require syntactic validation of feed URLs (trim leading/trailing whitespace and validate URI format); do not perform network-based validation
 - Store subscriptions in memory only (simplest approach)
 - Keep the UI simple and functional rather than polished
 
