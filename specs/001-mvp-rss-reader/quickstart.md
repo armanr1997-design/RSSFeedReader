@@ -2,7 +2,7 @@
 
 These instructions assume the repository uses the `backend/` and `frontend/` layout described in the plan. Adjust project paths as needed.
 
-1. Install .NET SDK (recommended: .NET 8)
+1. Install .NET SDK (recommended: .NET 10)
 
 2. Start the backend API (powershell):
 

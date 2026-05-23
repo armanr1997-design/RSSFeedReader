@@ -2,6 +2,10 @@
 
 A minimal RSS subscription manager MVP implemented as an ASP.NET Core Web API backend and a Blazor WebAssembly frontend.
 
+## Requirements
+
+- .NET SDK 10
+
 ## Quickstart
 
 1. Start the backend API:
@@ -14,6 +18,8 @@ dotnet run --project backend/RSSFeedReader.Api/RSSFeedReader.Api.csproj
 2. Start the frontend app:
 
 ```powershell
+cd c:\TrainingProjects\RSSFeedReader
+
 dotnet run --project frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj
 ```
 
