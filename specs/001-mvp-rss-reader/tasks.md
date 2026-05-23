@@ -1,125 +1,132 @@
+---
+description: "Task list template for feature implementation"
+---
+
 # Tasks: MVP RSS Reader
 
-**Input**: Design documents from `/specs/001-mvp-rss-reader/` (plan.md, spec.md, data-model.md, contracts/)
+**Input**: Design documents from `/specs/001-mvp-rss-reader/` (`plan.md`, `spec.md`, `data-model.md`, `contracts/`, `quickstart.md`)
 
 ## Phase 1: Setup (Shared Infrastructure)
 
-**Purpose**: Project initialization and basic structure for backend and frontend
+**Purpose**: Create the solution and baseline backend/frontend/test structure.
 
-- [x] T001 Create backend project `backend/RSSFeedReader.Api/RSSFeedReader.Api.csproj`
-- [x] T002 Create frontend Blazor WebAssembly project `frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj`
-- [x] T003 Create solution and add projects `RSSFeedReader.slnx` (repo root)
-- [x] T004 Initialize `README.md` and minimal `launchSettings.json` files in both projects
-- [x] T005 [P] Add `.editorconfig` and repository-level dev guidance files
-- [x] T006 [P] Add CI/dev dependencies scaffold (GitHub Actions workflow template) in `.github/workflows/`
+- [ ] T001 Create backend API project `backend/RSSFeedReader.Api/RSSFeedReader.Api.csproj`
+- [ ] T002 Create frontend Blazor WebAssembly project `frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj`
+- [ ] T003 Create solution `RSSFeedReader.slnx` and add backend/frontend/test projects
+- [ ] T004 Create initial `README.md` with MVP quickstart instructions
+- [ ] T005 [P] Add repository config files: `.editorconfig`, `.gitignore`
+- [ ] T006 [P] Add GitHub Actions workflow at `.github/workflows/dotnet.yml`
+- [ ] T007 [P] Create integration test project `tests/integration/integration.csproj`
 
 ---
 
 ## Phase 2: Foundational (Blocking Prerequisites)
 
-**Purpose**: Core infrastructure that MUST be complete before user stories
+**Purpose**: Implement shared backend and frontend infrastructure required by all stories.
 
-- [x] T007 Configure backend CORS and base routing in `backend/RSSFeedReader.Api/Program.cs`
-- [x] T008 Create `backend/RSSFeedReader.Api/Models/Subscription.cs` (data model per `data-model.md`)
-- [x] T009 Implement in-memory subscription store `backend/RSSFeedReader.Api/Services/SubscriptionStore.cs`
-- [x] T010 Implement subscription service `backend/RSSFeedReader.Api/Services/SubscriptionService.cs` (validation, duplicate checks)
-- [x] T011 Implement API controller `backend/RSSFeedReader.Api/Controllers/SubscriptionsController.cs` with `POST /api/subscriptions` and `GET /api/subscriptions`
-- [x] T012 [P] Add backend unit tests for validation and store behavior `tests/backend.unit/SubscriptionServiceTests.cs`
-- [x] T013 Wire frontend `HttpClient` base address from `frontend/RSSFeedReader.UI/wwwroot/appsettings.json` and register in `frontend/RSSFeedReader.UI/Program.cs`
-- [x] T014 [P] Create skeleton Blazor page `frontend/RSSFeedReader.UI/Pages/Subscriptions.razor` and component folder `frontend/RSSFeedReader.UI/Components/`
-- [x] T015 [P] Add bUnit setup and initial component test file `tests/frontend.components/SubscriptionsComponentTests.cs`
-- [x] T037 Remove Blazor template demo pages `frontend/RSSFeedReader.UI/Pages/Home.razor`, `frontend/RSSFeedReader.UI/Pages/Counter.razor`, `frontend/RSSFeedReader.UI/Pages/Weather.razor` and verify no ambiguous routes (per TechStack.md)
-- [x] T038 Add timing verification task (E2E or scripted check) to assert add→list visible within 1s; document manual verification steps in `quickstart.md` if automated test not implemented
+- [ ] T008 Configure backend routing and CORS in `backend/RSSFeedReader.Api/Program.cs`
+- [ ] T009 Create `backend/RSSFeedReader.Api/Models/Subscription.cs` based on `data-model.md`
+- [ ] T010 Create `backend/RSSFeedReader.Api/Models/AddSubscriptionRequest.cs`
+- [ ] T011 Implement `backend/RSSFeedReader.Api/Services/SubscriptionStore.cs`
+- [ ] T012 Implement `backend/RSSFeedReader.Api/Services/SubscriptionService.cs` with validation and duplicate handling
+- [ ] T013 Implement `backend/RSSFeedReader.Api/Controllers/SubscriptionsController.cs` for `GET /api/subscriptions` and `POST /api/subscriptions`
+- [ ] T014 [P] Configure frontend `HttpClient` base address in `frontend/RSSFeedReader.UI/Program.cs` and `frontend/RSSFeedReader.UI/wwwroot/appsettings.json`
+- [ ] T015 [P] Remove template pages `frontend/RSSFeedReader.UI/Pages/Home.razor`, `frontend/RSSFeedReader.UI/Pages/Counter.razor`, `frontend/RSSFeedReader.UI/Pages/Weather.razor`
+- [ ] T016 [P] Update `frontend/RSSFeedReader.UI/Layout/NavMenu.razor` to expose only the subscriptions page
+- [ ] T017 [P] Add backend unit test project `tests/backend.unit/backend.unit.csproj` and reference backend project
+- [ ] T018 [P] Add frontend component test project `tests/frontend.components/frontend.components.csproj` and reference frontend project
+- [ ] T019 [P] Add backend unit tests for core subscription behavior in `tests/backend.unit/SubscriptionServiceTests.cs`
+- [ ] T020 [P] Add frontend component test skeleton in `tests/frontend.components/SubscriptionsComponentTests.cs`
 
-**Checkpoint**: Foundation ready — API endpoints exist and frontend project can call them locally
+**Checkpoint**: Foundation ready — backend and frontend wiring exist and template cleanup is complete.
 
 ---
 
 ## Phase 3: User Story 1 - Add a Feed Subscription (Priority: P1) 🎯 MVP
 
-**Goal**: Allow a user to enter a feed URL, validate/trim it, add to in-memory list, and display it immediately.
+**Goal**: Allow a user to enter a feed URL, validate/trim it, add it to the in-memory subscription list, and immediately see it displayed.
 
-**Independent Test**: User can enter a valid URL and see it appear in the subscription list on the same page.
+**Independent Test**: A valid URL is entered and appears in the subscription list on the same page.
 
-- [x] T016 [P] [US1] Implement `frontend/RSSFeedReader.UI/Components/AddSubscription.razor` (input field + Add button)
-- [x] T017 [US1] Implement `frontend/RSSFeedReader.UI/Pages/Subscriptions.razor` to display list and call API
-- [x] T018 [US1] Implement client-side trimming and simple URL scheme check in `AddSubscription.razor` (UI-level validation)
-- [x] T019 [US1] Implement POST handling in `SubscriptionsController` to accept `{ "url": "..." }` and return `201 Created` on success
-- [x] T020 [US1] Implement GET `/api/subscriptions` to return current list (controller method)
-- [x] T021 [US1] Add end-to-end verification script in `specs/001-mvp-rss-reader/quickstart.md` to confirm add→list flow
-- [x] T022 [US1] [P] Add component tests (bUnit) verifying input trimming, add action, and list rendering `tests/frontend.components/SubscriptionsComponentTests.cs`
-- [x] T023 [US1] Add backend unit tests to assert duplicate prevention and invalid URL rejection `tests/backend.unit/SubscriptionServiceTests.cs`
+- [ ] T021 [P] [US1] Implement `frontend/RSSFeedReader.UI/Components/AddSubscription.razor` with URL input, Add button, and feedback message
+- [ ] T022 [US1] Implement `frontend/RSSFeedReader.UI/Pages/Subscriptions.razor` to render the subscription list and call the add component
+- [ ] T023 [US1] Add client-side trimming and URL scheme validation in `AddSubscription.razor`
+- [ ] T024 [US1] Implement `POST /api/subscriptions` handling in `backend/RSSFeedReader.Api/Controllers/SubscriptionsController.cs`
+- [ ] T025 [US1] Implement `GET /api/subscriptions` in `SubscriptionsController.cs`
+- [ ] T026 [US1] Add component tests in `tests/frontend.components/SubscriptionsComponentTests.cs` verifying add flow and list rendering
+- [ ] T027 [US1] Add backend tests in `tests/backend.unit/SubscriptionServiceTests.cs` for valid add and storage behavior
+- [ ] T028 [US1] Document add-to-list verification in `specs/001-mvp-rss-reader/quickstart.md`
 
-**Checkpoint**: US1 complete — user can add subscriptions and see them listed (MVP satisfied)
+**Checkpoint**: US1 is independently testable and delivers the MVP add/list workflow.
 
 ---
 
 ## Phase 4: User Story 2 - View the Subscription List (Priority: P1)
 
-**Goal**: Display all current subscriptions in a readable list and preserve order.
+**Goal**: Display all subscriptions in a readable ordered list so users can verify the current state.
 
-**Independent Test**: After adding subscriptions, the list page shows each URL in insertion order.
+**Independent Test**: After adding multiple subscriptions, the page shows each URL in insertion order.
 
-- [x] T024 [P] [US2] Implement ordered list rendering in `frontend/RSSFeedReader.UI/Pages/Subscriptions.razor`
-- [x] T025 [US2] Ensure GET `/api/subscriptions` returns subscriptions in insertion order (controller/service)
-- [x] T026 [US2] Add component tests (bUnit) asserting multiple items display correctly `tests/frontend.components/SubscriptionsPageTests.cs`
-- [x] T027 [US2] Add integration test to simulate add then fetch list `tests/integration/AddThenListTests.cs`
+- [ ] T029 [P] [US2] Render ordered list entries in `frontend/RSSFeedReader.UI/Pages/Subscriptions.razor`
+- [ ] T030 [US2] Preserve insertion order in `backend/RSSFeedReader.Api/Services/SubscriptionService.cs`
+- [ ] T031 [US2] Add component tests in `tests/frontend.components/SubscriptionsPageTests.cs` for multiple subscriptions
+- [ ] T032 [US2] Add integration test in `tests/integration/AddThenListTests.cs` covering add then list retrieval
 
 ---
 
 ## Phase 5: User Story 3 - Prevent Invalid or Duplicate Subscriptions (Priority: P2)
 
-**Goal**: Reject malformed, empty, whitespace-only, or duplicate URLs and present clear validation messages.
+**Goal**: Reject malformed, empty, whitespace-only, or duplicate URLs with clear error feedback and no list mutation.
 
-**Independent Test**: Attempting to add invalid or duplicate URLs yields a user-facing message and does not change the list.
+**Independent Test**: Invalid or duplicate submissions return visible errors and do not alter the list.
 
-- [x] T028 [US3] Implement server-side validation (trim, Uri.TryCreate, scheme check) in `backend/RSSFeedReader.Api/Services/SubscriptionService.cs`
-- [x] T029 [US3] Implement duplicate check in `SubscriptionService` and return `400 Bad Request` with a clear error message when duplicate
-- [x] T030 [US3] Implement UI validation error display in `AddSubscription.razor` (show messages returned by API)
-- [x] T031 [US3] Add backend unit tests for invalid inputs and duplicates `tests/backend.unit/SubscriptionServiceTests.cs`
-- [x] T032 [US3] Add component tests asserting validation messages shown and list unchanged `tests/frontend.components/SubscriptionsComponentTests.cs`
+- [ ] T033 [US3] Implement server-side validation in `backend/RSSFeedReader.Api/Services/SubscriptionService.cs`
+- [ ] T034 [US3] Implement duplicate detection and `400 Bad Request` response in `SubscriptionService.cs`
+- [ ] T035 [US3] Display validation errors in `frontend/RSSFeedReader.UI/Components/AddSubscription.razor`
+- [ ] T036 [US3] Add backend tests for invalid and duplicate subscriptions in `tests/backend.unit/SubscriptionServiceTests.cs`
+- [ ] T037 [US3] Add frontend validation tests in `tests/frontend.components/SubscriptionsComponentTests.cs`
 
 ---
 
 ## Phase N: Polish & Cross-Cutting Concerns
 
-- [x] T033 [P] Documentation updates: finalize `specs/001-mvp-rss-reader/quickstart.md` and `README.md`
-- [x] T034 Code cleanup and refactoring across backend/frontend
-- [ ] T035 [P] Add logging and minimal telemetry to backend `backend/RSSFeedReader.Api/Program.cs`
-- [x] T036 [P] Run quickstart validation script/manual checklist in `specs/001-mvp-rss-reader/quickstart.md`
+- [ ] T038 [P] Finalize documentation updates in `specs/001-mvp-rss-reader/quickstart.md` and `README.md`
+- [ ] T039 Code cleanup and refactoring across backend/frontend files
+- [ ] T040 [P] Add logging and minimal telemetry scaffolding in `backend/RSSFeedReader.Api/Program.cs`
+- [ ] T041 [P] Validate the quickstart checklist in `specs/001-mvp-rss-reader/quickstart.md`
 
 ---
 
 ## Dependencies & Execution Order
 
-- Setup (T001-T006): can start immediately. Many sub-tasks are parallelizable ([P]).
-- Foundational (T007-T015): BLOCKS user stories — must complete before US work continues.
-- User Stories (T016-T032): depend on Foundational completion. US1 and US2 are P1 and should be prioritized; US3 is P2.
-- Polish (T033-T036): follow after user stories complete.
+- Setup (T001-T007): start immediately. Many tasks are parallelizable.
+- Foundational (T008-T020): must complete before user story work begins.
+- User Stories (T021-T037): depend on foundational completion.
+- Polish (T038-T041): follow after user stories are implemented.
 
 ## Parallel Execution Examples
 
-- Workstream A: Backend engineer implements T007-T011 and T028-T031 (validation + service)
-- Workstream B: Frontend engineer implements T013-T017 and T018-T021 (HttpClient + UI + POST/GET wiring)
-- Workstream C: QA/Tester implements T012, T015, T022, T026, T032 (tests)
+- Backend workstream: T008-T013, T019, T027, T033-T036
+- Frontend workstream: T014-T016, T021-T023, T029, T031, T035
+- QA workstream: T019, T020, T026, T032, T037, T041
 
 ## Summary
 
 - Path to tasks file: `specs/001-mvp-rss-reader/tasks.md`
-- Total tasks: 36 (T001–T036)
-- Task count by story:
-  - Setup/Foundation: 15 tasks (T001–T015)
-  - US1 (P1): 8 tasks (T016–T023)
-  - US2 (P1): 4 tasks (T024–T027)
-  - US3 (P2): 5 tasks (T028–T032)
-  - Polish: 4 tasks (T033–T036)
-- Parallel opportunities: many tasks marked `[P]` (setup, tests, separate services/components) and independent user stories after foundational phase
+- Total tasks: 41 (T001–T041)
+- Task count by area:
+  - Setup/Foundation: 20 tasks (T001–T020)
+  - US1: 8 tasks (T021–T028)
+  - US2: 4 tasks (T029–T032)
+  - US3: 5 tasks (T033–T037)
+  - Polish: 4 tasks (T038–T041)
+- Parallel opportunities: many `[P]` tasks in setup, testing, and separate backend/frontend work
 - Independent test criteria:
-  - US1: Add a valid URL and observe it in the list within 1s (manual + automated test)
-  - US2: After multiple adds, view list and confirm all items present in order
-  - US3: Adding invalid or duplicate entries returns clear errors and list unchanged
-- Suggested MVP scope: Complete only US1 (T016–T023) after Foundational tasks — sufficient for an MVP demo
+  - US1: Add a valid URL and see it appear immediately
+  - US2: After multiple adds, view list and confirm all items appear in order
+  - US3: Invalid or duplicate entries return clear errors and no list change
+- Suggested MVP scope: complete US1 after foundational setup, then extend to US2 and US3.
 
 ## Format validation
 
-- All tasks use the checklist format `- [ ] T### [P?] [US?] Description with file path` as required.
+- All tasks use the checklist format `- [ ] T### [P?] [US?] Description with file path`
