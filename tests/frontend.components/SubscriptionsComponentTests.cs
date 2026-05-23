@@ -10,7 +10,7 @@ public class SubscriptionsComponentTests : TestContext
     [Fact]
     public void AddSubscriptionComponent_RendersInputAndButton()
     {
-        Services.AddSingleton(new HttpClient { BaseAddress = new Uri("http://localhost:5170/api/") });
+        Services.AddSingleton(new HttpClient { BaseAddress = new Uri("http://localhost:5151/api/") });
 
         var cut = RenderComponent<RSSFeedReader.UI.Components.AddSubscription>(parameters => parameters
             .Add(p => p.OnAdded, (Action<RSSFeedReader.UI.Models.Subscription>)(_ => { })));
@@ -25,7 +25,7 @@ public class SubscriptionsComponentTests : TestContext
     [Fact]
     public void AddSubscriptionComponent_ShowsValidationMessageForInvalidUrl()
     {
-        Services.AddSingleton(new HttpClient { BaseAddress = new Uri("http://localhost:5170/api/") });
+        Services.AddSingleton(new HttpClient { BaseAddress = new Uri("http://localhost:5151/api/") });
 
         var cut = RenderComponent<RSSFeedReader.UI.Components.AddSubscription>(parameters => parameters
             .Add(p => p.OnAdded, (Action<RSSFeedReader.UI.Models.Subscription>)(_ => { })));

@@ -16,7 +16,7 @@ public class SubscriptionsPageTests : TestContext
     public void SubscriptionsPage_ShowsFetchedSubscriptionList()
     {
         var json = "[{ \"url\": \"https://example.com/feed\", \"createdAt\": \"2026-05-22T12:00:00Z\" }]";
-        Services.AddSingleton(new HttpClient(new MockHttpHandler(json)) { BaseAddress = new Uri("http://localhost:5170/api/") });
+        Services.AddSingleton(new HttpClient(new MockHttpHandler(json)) { BaseAddress = new Uri("http://localhost:5151/api/") });
 
         var cut = RenderComponent<Subscriptions>();
 

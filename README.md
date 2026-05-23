@@ -34,5 +34,5 @@ dotnet run --project frontend/RSSFeedReader.UI/RSSFeedReader.UI.csproj
 
 ## Notes
 
-- The backend listens on `http://localhost:5170` by default and exposes `POST /api/subscriptions` and `GET /api/subscriptions`.
-- The frontend is configured to use `http://localhost:5170/api/` via `frontend/RSSFeedReader.UI/wwwroot/appsettings.json`.
+- The backend listens on `http://localhost:5151` by default and exposes `POST /api/subscriptions` and `GET /api/subscriptions`.
+- The frontend is configured to use `http://localhost:5151/api/` via `frontend/RSSFeedReader.UI/wwwroot/appsettings.json`.
